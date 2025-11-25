@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js">
+<html class="no-js" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
 	<meta charset="utf-8">
@@ -69,6 +69,17 @@ Header start
 
                             <!-- Collect the nav links, forms, and other content for toggling -->
                             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <ul class="nav navbar-nav navbar-right"> <!-- Auth menük -->
+                                    <li sec:authorize="isAuthenticated()"><a href="/uzenetek">Üzenetek</a></li>
+                                    <li sec:authorize="hasRole('ADMIN')"><a href="/admin/crud">Admin</a></li>
+
+                                    <li sec:authorize="isAnonymous()"><a href="/login">Bejelentkezés</a></li>
+                                    <li sec:authorize="isAnonymous()"><a href="/register">Regisztráció</a></li>
+                                    <li sec:authorize="isAuthenticated()">
+                                        <form id="logoutForm" th:action="@{/logout}" method="post" style="display:inline"></form>
+                                        <a href="#" onclick="document.getElementById('logoutForm').submit();">Kijelentkezés</a>
+                                    </li>
+                                </ul>
                                 <ul class="nav navbar-nav navbar-right" id="top-nav">
                                     <li><a href="#hero-area">Főoldal</a></li>
                                     <li><a href="#about-us">Rólunk</a></li>
