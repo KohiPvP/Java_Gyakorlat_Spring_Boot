@@ -46,7 +46,7 @@ public class HomeController {
     // Üzenetek menü -- Regisztrált felhasználóknak
     @GetMapping("/uzenetek")
     public String Uzenetek() {
-        return "Uzenetek";
+        return "uzenetek";
     }
 
     // Admin menü -- Regisztrált felhasználóknak admin joggal

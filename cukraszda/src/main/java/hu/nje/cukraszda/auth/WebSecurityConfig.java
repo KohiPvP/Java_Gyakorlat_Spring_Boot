@@ -34,11 +34,19 @@ public class WebSecurityConfig {
                             "/js/**",
                             "/less/**"
                         ).permitAll()
-                        .requestMatchers("/", "/index", "/login", "/register", "/registering").permitAll()
+                        .requestMatchers( // Mindeki jogosult / Oldalak
+                                "/",
+                                "/index",
+                                "/adatbazis",
+                                "/login",
+                                "/register",
+                                "/registering"
+                        ).permitAll()
                         // Bejelentkezett felhasználóknak
                         .requestMatchers("/uzenetek").authenticated()
                         // Admin jogosultsággal
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().permitAll()
                 )
                 .formLogin(form->form
                         .loginPage("/login") // Login oldal
