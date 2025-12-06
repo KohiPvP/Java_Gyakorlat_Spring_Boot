@@ -50,8 +50,7 @@ public class HomeController {
     }
 
     // Admin menü -- Regisztrált felhasználóknak admin joggal
-    // Admin menün belül lesz a CRUD menü
-    @GetMapping("/admin/crud")
+    @GetMapping("/admin")
     public String admin() {
         return "admin";
     }

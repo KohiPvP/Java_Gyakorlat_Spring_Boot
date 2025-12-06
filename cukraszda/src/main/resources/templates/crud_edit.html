@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Adatbázis</title>
+    <title>Szerkesztés</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSS
@@ -35,19 +35,17 @@
     <script src="/js/main.js"></script>
 
     <style>
-        table {
-            text-align: center;
-            border-collapse: collapse;
-            width: 80%;
-            margin: 20px auto;
+        .edit {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
         }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
+        .edit form {
             text-align: center;
         }
-        th {
-            background-color: #f2f2f2;
+        .edit input,
+        .edit button {
+            margin: 8px;
         }
     </style>
 </head>
@@ -57,7 +55,7 @@
 header-img start
 ============================== -->
 <section id="hero-area">
-    <img class="img-responsive" src="images/header.jpg" alt="">
+    <img class="img-responsive" src="/images/header.jpg" alt="">
 </section>
 <!--
 Header start
@@ -91,10 +89,7 @@ Header start
                                     <li><a href="/adatbazis">Adatbázis</a></li>
                                     <!-- Auth menük -->
                                     <li sec:authorize="isAuthenticated()"><a href="/uzenetek">Üzenetek</a></li>
-                                    <li sec:authorize="hasRole('ADMIN')"><a href="/admin">Admin</a></li>
 
-                                    <li sec:authorize="isAnonymous()"><a href="/login">Bejelentkezés</a></li>
-                                    <li sec:authorize="isAnonymous()"><a href="/register">Regisztráció</a></li>
                                     <li sec:authorize="isAuthenticated()">
                                         <form id="logoutForm" th:action="@{/logout}" method="post" style="display:inline"></form>
                                         <a href="#" onclick="document.getElementById('logoutForm').submit();">Kijelentkezés</a>
@@ -109,33 +104,18 @@ Header start
     </div><!-- .container close -->
 </nav><!-- header close -->
 
-<div style="text-align:center; margin-top:20px; font-size:18px; font-weight:bold;">
-    Összesen <span th:text="${#lists.size(arak)}"></span> ár közül választhat!
+<div class="edit">
+    <form action="#" th:action="@{/admin/crud/edit}" th:object="${suti}" method="post" >
+        <p><input type="hidden" th:field="*{id}" value= "${suti.id}" /></p>
+        <input type="text" th:field="*{nev}" value= "${suti.nev}">
+        <input type="text" th:field="*{tipus}" value= "${suti.tipus}">
+        <label>
+            <input type="checkbox" th:field="*{dijazott}" value="${suti.dijazott}}"> Díjazott
+        </label>
+        <button type="submit">Mentés</button>
+        <button type="button" onclick="window.location.href='/admin/crud'">Mégsem</button>
+    </form>
 </div>
-
-
-<table>
-    <thead>
-    <tr>
-        <th>Süti neve</th>
-        <th>Típus</th>
-        <th>Díjazott</th>
-        <th>Ár</th>
-        <th>Egység</th>
-        <th>Mentes</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="ar : ${arak}">
-        <td th:text="${ar.suti.nev}">Süti neve</td>
-        <td th:text="${ar.suti.tipus}">Típus</td>
-        <td th:text="${ar.suti.dijazott ? 'Igen' : ''}">Díjazott</td>
-        <td th:text="${ar.ertek}">Ár</td>
-        <td th:text="${ar.egyseg}">Egység</td>
-        <td th:text="${ar.suti?.tartalom?.mentes}">Mentes</td>
-    </tr>
-    </tbody>
-</table>
 
 <!--
 footer-bottom  start

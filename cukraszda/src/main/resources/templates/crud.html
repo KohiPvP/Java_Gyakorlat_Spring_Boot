@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Adatbázis</title>
+    <title>Sütik szerkesztése</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSS
@@ -49,6 +49,10 @@
         th {
             background-color: #f2f2f2;
         }
+        #addForm {
+            display:none;
+            margin:20px auto;
+            text-align:center; }
     </style>
 </head>
 
@@ -57,7 +61,7 @@
 header-img start
 ============================== -->
 <section id="hero-area">
-    <img class="img-responsive" src="images/header.jpg" alt="">
+    <img class="img-responsive" src="/images/header.jpg" alt="">
 </section>
 <!--
 Header start
@@ -92,9 +96,6 @@ Header start
                                     <!-- Auth menük -->
                                     <li sec:authorize="isAuthenticated()"><a href="/uzenetek">Üzenetek</a></li>
                                     <li sec:authorize="hasRole('ADMIN')"><a href="/admin">Admin</a></li>
-
-                                    <li sec:authorize="isAnonymous()"><a href="/login">Bejelentkezés</a></li>
-                                    <li sec:authorize="isAnonymous()"><a href="/register">Regisztráció</a></li>
                                     <li sec:authorize="isAuthenticated()">
                                         <form id="logoutForm" th:action="@{/logout}" method="post" style="display:inline"></form>
                                         <a href="#" onclick="document.getElementById('logoutForm').submit();">Kijelentkezés</a>
@@ -110,9 +111,22 @@ Header start
 </nav><!-- header close -->
 
 <div style="text-align:center; margin-top:20px; font-size:18px; font-weight:bold;">
-    Összesen <span th:text="${#lists.size(arak)}"></span> ár közül választhat!
+    Sütik: <span th:text="${#lists.size(sutik)}"></span>
 </div>
 
+<div style="text-align:center; margin:10px;">
+    <button id="showAddForm">Új hozzáadása</button>
+</div>
+
+<form action="#" th:action="@{/admin/crud/save}" th:object="${new_suti}" method="post" id="addForm">
+    <input type="text" th:field="*{nev}" placeholder="Név">
+    <input type="text" th:field="*{tipus}" placeholder="Típus">
+    <label>
+        <input type="checkbox" th:field="*{dijazott}"> Díjazott
+    </label>
+    <button type="submit">Mentés</button>
+    <button type="button" id="cancelAdd">Mégsem</button>
+</form>
 
 <table>
     <thead>
@@ -120,19 +134,23 @@ Header start
         <th>Süti neve</th>
         <th>Típus</th>
         <th>Díjazott</th>
-        <th>Ár</th>
-        <th>Egység</th>
-        <th>Mentes</th>
+        <th>Műveletek</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="ar : ${arak}">
-        <td th:text="${ar.suti.nev}">Süti neve</td>
-        <td th:text="${ar.suti.tipus}">Típus</td>
-        <td th:text="${ar.suti.dijazott ? 'Igen' : ''}">Díjazott</td>
-        <td th:text="${ar.ertek}">Ár</td>
-        <td th:text="${ar.egyseg}">Egység</td>
-        <td th:text="${ar.suti?.tartalom?.mentes}">Mentes</td>
+    <tr th:each="s : ${sutik}">
+        <td th:text="${s.nev}">Süti neve</td>
+        <td th:text="${s.tipus}">Típus</td>
+        <td th:text="${s.dijazott ? 'Igen' : ''}">Díjazott</td>
+        <td>
+            <form action="#" th:action="@{'/admin/crud/edit/' + ${s.id}}" method="get" style="display: inline">
+                <button type="submit">Szerkesztés</button>
+            </form>
+            <form action="#" th:action="@{'/admin/crud/delete/' + ${s.id}}" method="get"
+                  onsubmit="return confirm('Biztosan törölni szeretné?');" style="display: inline">
+                <button type="submit">Törlés</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>
@@ -152,6 +170,18 @@ footer-bottom  start
         </div>
     </div>
 </footer>
+
+<script>
+    // Új hozzáadás form megjelenítése
+    document.getElementById("showAddForm").addEventListener("click", function() {
+        document.getElementById("addForm").style.display = "block";
+        this.style.display = "none";
+    });
+    document.getElementById("cancelAdd").addEventListener("click", function() {
+        document.getElementById("addForm").style.display = "none";
+        document.getElementById("showAddForm").style.display = "inline-block";
+    });
+</script>
 
 </body>
 
