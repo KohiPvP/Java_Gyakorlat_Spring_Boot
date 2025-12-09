@@ -1,10 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="no-js" xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Adatbázis</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS
+        ================================================ -->
+    <!-- Owl Carousel -->
+    <link rel="stylesheet" href="/css/owl.carousel.css">
+    <!-- bootstrap.min css -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- Font-awesome.min css -->
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/animate.min.css">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <!-- Responsive Stylesheet -->
+    <link rel="stylesheet" href="/css/responsive.css">
+    <!-- Js -->
+    <script src="/js/vendor/modernizr-2.6.2.min.js"></script>
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
+    <script>
+        window.jQuery || document.write('<script src="/js/vendor/jquery-1.10.2.min.js"><\/script>')
+    </script>
+    <script src="/js/jquery.nav.js"></script>
+    <script src="/js/jquery.sticky.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/plugins.js"></script>
+    <script src="/js/wow.min.js"></script>
+    <script src="/js/main.js"></script>
+
+    <style>
+        table {
+            text-align: center;
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
+
 <body>
+<!--
+header-img start
+============================== -->
+<section id="hero-area">
+    <img class="img-responsive" src="images/header.jpg" alt="">
+</section>
+<!--
+Header start
+============================== -->
+<nav id="navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="block">
+                    <nav class="navbar navbar-default">
+                        <div class="container-fluid">
+                            <!-- Brand and toggle get grouped for better mobile display -->
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                                        data-target="#bs-example-navbar-collapse-1">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </button>
+                                <a class="navbar-brand" href="/">
+                                    <img src="/images/logo.png" alt="Logo">
+                                </a>
+
+                            </div>
+
+                            <!-- Collect the nav links, forms, and other content for toggling -->
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li><a href="/">Főoldal</a></li>
+                                    <li><a href="/adatbazis">Adatbázis</a></li>
+                                    <!-- Auth menük -->
+                                    <li sec:authorize="isAuthenticated()"><a href="/adatbazis">Adatbázis</a></li>
+                                    <li sec:authorize="hasRole('ADMIN')"><a href="/admin">Admin</a></li>
+
+                                    <li sec:authorize="isAnonymous()"><a href="/login">Bejelentkezés</a></li>
+                                    <li sec:authorize="isAnonymous()"><a href="/register">Regisztráció</a></li>
+                                    <li sec:authorize="isAuthenticated()">
+                                        <form id="logoutForm" th:action="@{/logout}" method="post" style="display:inline"></form>
+                                        <a href="#" onclick="document.getElementById('logoutForm').submit();">Kijelentkezés</a>
+                                    </li>
+                                </ul>
+                            </div><!-- /.navbar-collapse -->
+                        </div><!-- /.container-fluid -->
+                    </nav>
+                </div>
+            </div><!-- .col-md-12 close -->
+        </div><!-- .row close -->
+    </div><!-- .container close -->
+</nav><!-- header close -->
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Név</th>
+        <th>Email</th>
+        <th>Tárgy</th>
+        <th>Üzenet</th>
+        <th>Létrehozva</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="msg : ${messages}">
+        <td th:text="${msg.id}"></td>
+        <td th:text="${msg.nev}"></td>
+        <td th:text="${msg.email}"></td>
+        <td th:text="${msg.targy}"></td>
+        <td th:text="${msg.uzenet}"></td>
+        <td th:text="${#temporals.format(msg.letrehozva, 'yyyy-MM-dd HH:mm')}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<!--
+footer-bottom  start
+============================= -->
+<footer id="footer-bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="block">
+                    <p>Copyright &copy; 2014 - Minden jog fenntartva. Design and Developed By <a
+                            href="http://www.themefisher.com">Themefisher</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
 
 </body>
+
 </html>

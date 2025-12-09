@@ -2,6 +2,8 @@ package hu.nje.cukraszda.controller;
 
 import hu.nje.cukraszda.auth.User;
 import hu.nje.cukraszda.auth.UserRepo;
+import hu.nje.cukraszda.message.ContactMessage;
+import hu.nje.cukraszda.message.ContactMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -10,8 +12,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class HomeController {
+
+    private final ContactMessageRepository contactMessageRepository;
+
+    public HomeController(ContactMessageRepository contactMessageRepository) {
+        this.contactMessageRepository = contactMessageRepository;
+    }
+
     @GetMapping
     public String index() {
         return "index"; // templates/index.html
@@ -45,7 +56,9 @@ public class HomeController {
 
     // Üzenetek menü -- Regisztrált felhasználóknak
     @GetMapping("/uzenetek")
-    public String Uzenetek() {
+    public String uzenetek(Model model) {
+        List<ContactMessage> contactMessages = contactMessageRepository.findAll();
+        model.addAttribute("messages", contactMessages);
         return "uzenetek";
     }
 
