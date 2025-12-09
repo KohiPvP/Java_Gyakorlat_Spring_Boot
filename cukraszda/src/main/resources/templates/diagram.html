@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ár Diagram</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body { max-width: 800px; margin: 40px auto; font-family: Arial; }
+    </style>
+</head>
+<body>
+
+<h2>Süti árak diagramja</h2>
+
+<canvas id="arChart"></canvas>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    const labels = [[${labels}]];
+    const values = [[${values}]];
+
+    const ctx = document.getElementById('arChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Ár (Ft)',
+                data: values
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Süti árak (érték mező alapján)'
+                }
+            }
+        }
+    });
+
+    /*]]>*/
+</script>
+
+</body>
+</html>
